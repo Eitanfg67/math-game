@@ -44,32 +44,28 @@ function nextQuestion() {
     if (qNo.innerText == "10") {
         whenFinished();
     }
-    n1 = Math.floor(Math.random() * 100);
-    n2 = Math.floor(Math.random() * 100);
-    opSelector = operator[Math.floor(Math.random() * 4)];
+    
+    const a = Math.floor(Math.random() * 10) + 1; // a between 1 and 10
+    const b = Math.floor(Math.random() * 20) + 1; // b between 1 and 20
+    const c = a * Math.floor(Math.random() * 10) + b; // c between b and 10a+b
+    
+    const equationElement = document.getElementById("equation");
+    equationElement.innerHTML = `${a}x + ${b} = ${c}`;
+    
+    const xEqualsElement = document.getElementById("x-equals");
+    xEqualsElement.innerHTML = "x = ?";
+    
+    const questionContainer = document.getElementById("question-container");
+    questionContainer.appendChild(equationElement);
+    questionContainer.appendChild(xEqualsElement);
 
-    if (opSelector == "/") {
-        for (var i = 0; i < 200; i++) {
-            if (n1 % n2 == 0 && n1 != 0 && n2 != 0 && n2 != 1 && n1 != n2) {
-                break;
-            }
-            n1 = Math.floor(Math.random() * 100);
-            n2 = Math.floor(Math.random() * 100);
-        }
-    }
+    console.log(equation);
+    const x = (c - b) / a;
+    Ranswer = `${x}`;
+    console.log(Ranswer);
+    
 
-    if (opSelector == "*") {
-        for (var i = 0; i < 100; i++) {
-            if (n1 * n2 <= 1000) {
-                break;
-            }
-            n1 = Math.floor(Math.random() * 50);
-            n2 = Math.floor(Math.random() * 50);
-        }
-    }
-    question.innerHTML = n1 + opSelector + n2;
-    answer = eval(question.innerHTML);
-    question.innerHTML = question.innerHTML + " = ?";
+
 
     getOptions();
     getQNo();
@@ -77,30 +73,44 @@ function nextQuestion() {
 }
 
 function getOptions() {
-
-    for (var i = 0; i < 4; i++ && i != ansOpt) {
-        if (answer > 100) {
-            buttons[i].innerHTML = answer + Math.floor(Math.random() * answer * 0.4);
-        } else if (answer > 30 && answer < 100) {
-            buttons[i].innerHTML = answer + Math.floor(Math.random() * answer * 0.6);
-        } else {
-            buttons[i].innerHTML = Math.floor(Math.random() * 100);
-        }
-
-        if (answer < 0) {
-            buttons[i].innerHTML = "-" + buttons[i].innerHTML;
-        }
+    let options = [];
+  
+    for (let i = 0; i < 3; i++) {
+    let option = 0;
+    if (Ranswer > 100) {
+        option = Ranswer + Math.floor(Math.random() * Ranswer * 0.4);
+    } else if (Ranswer > 30 && Ranswer < 100) {
+        option = Ranswer + Math.floor(Math.random() * Ranswer * 0.6);
+    } else {
+        option = Math.floor(Math.random() * 100);
     }
-    ansOpt = Math.floor(Math.random() * 4);
-    buttons[ansOpt].innerHTML = answer;
+  
+    if (Ranswer < 0) {
+        option = "-" + option;
+    }
+  
+      options.push(option);
+    }
+  
+    options.push(Ranswer);
+  
+    options.sort(() => Math.random() - 0.5);
+  
+    for (let i = 0; i < buttons.length; i++) {
+        buttons[i].innerHTML = options[i];
+    }
+    
+    ansOpt = options.indexOf(Ranswer);
 }
+  
+
 
 function getQNo() {
     qNo.innerHTML = parseInt(qNo.innerHTML) + 1;
 }
 
 function getScore() {
-    score.innerHTML = parseInt(score.innerHTML) + parseInt(progress.style.width);
+    score.innerHTML = parseInt(score.innerHTML) + parseInt(progress.style.width) + 10;
 }
 
 function doWhenCorrect(i) {
@@ -151,7 +161,7 @@ function timed() {
 }
 
 buttons[0].addEventListener('click', () => {
-    if (buttons[0].innerText == answer) {
+    if (buttons[0].innerText == Ranswer) {
         doWhenCorrect(0);
     } else {
         doWhenIncorrect(0);
@@ -160,7 +170,7 @@ buttons[0].addEventListener('click', () => {
     outro(0);
 });
 buttons[1].addEventListener('click', () => {
-    if (buttons[1].innerText == answer) {
+    if (buttons[1].innerText == Ranswer) {
         doWhenCorrect(1);
     } else {
         doWhenIncorrect(1);
@@ -169,7 +179,7 @@ buttons[1].addEventListener('click', () => {
     outro(1);
 });
 buttons[2].addEventListener('click', () => {
-    if (buttons[2].innerText == answer) {
+    if (buttons[2].innerText == Ranswer) {
         doWhenCorrect(2);
     } else {
         doWhenIncorrect(2);;
@@ -178,7 +188,7 @@ buttons[2].addEventListener('click', () => {
     outro(2);
 });
 buttons[3].addEventListener('click', () => {
-    if (buttons[3].innerText == answer) {
+    if (buttons[3].innerText == Ranswer) {
         doWhenCorrect(3);
     } else {
         doWhenIncorrect(3);
