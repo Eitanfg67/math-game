@@ -30,7 +30,7 @@ body {
     padding: 2.5rem;
 }
 
-.question-card {
+#equation, #x-equals {
     background-color: aquamarine;
     border-radius: 1rem;
     margin: 2rem auto;
